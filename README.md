@@ -1,3 +1,5 @@
+# This is a student lab repo. Please refer to https://github.com/softwareconstruction240/chess
+
 # ♕ BYU CS 240 Chess
 
 This project demonstrates mastery of proper software design, client/server architecture, networking using HTTP and WebSocket, database persistence, unit testing, serialization, and security.
@@ -21,7 +23,7 @@ The application has three modules.
 As you create your chess application you will move through specific phases of development. This starts with implementing the moves of chess and finishes with sending game moves over the network between your client and server. You will start each phase by copying course provided [starter-code](starter-code/) for that phase into the source code of the project. Do not copy a phases' starter code before you are ready to begin work on that phase.
 
 ## IntelliJ Support
-
+### Please don't use IntelliJ, it sucks. If you can't program and must use an IDE, use VSCode or Eclipse
 Open the project directory in IntelliJ in order to develop, run, and debug your code using an IDE.
 
 ## Maven Support
