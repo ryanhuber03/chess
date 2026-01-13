@@ -8,8 +8,13 @@ package chess;
  */
 public class ChessMove {
 
+    // make private variables for all the below items
+    private PieceType ChessPiece.PieceType, promotionPiece;
+
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
+        this.promotionPiece = promotionPiece;
+        this.ChessPiece.Piecetype = ChessPiece.Piecetype;
     }
 
     /**
@@ -33,6 +38,6 @@ public class ChessMove {
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
     public ChessPiece.PieceType getPromotionPiece() {
-        throw new RuntimeException("Not implemented");
+        return promotionPiece;
     }
 }
