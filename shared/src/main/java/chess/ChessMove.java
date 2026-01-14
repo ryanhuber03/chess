@@ -9,26 +9,29 @@ package chess;
 public class ChessMove {
 
     // make private variables for all the below items
-    private PieceType ChessPiece.PieceType, promotionPiece;
+    private ChessPiece.PieceType promotionPiece;
+    private ChessPosition startPosition;
+    private ChessPosition endPosition;
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
         this.promotionPiece = promotionPiece;
-        this.ChessPiece.Piecetype = ChessPiece.Piecetype;
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
     }
 
     /**
      * @return ChessPosition of starting location
      */
     public ChessPosition getStartPosition() {
-        throw new RuntimeException("Not implemented");
+        return startPosition;
     }
 
     /**
      * @return ChessPosition of ending location
      */
     public ChessPosition getEndPosition() {
-        throw new RuntimeException("Not implemented");
+        return endPosition;
     }
 
     /**
