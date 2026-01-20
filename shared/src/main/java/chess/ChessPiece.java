@@ -18,6 +18,12 @@ public class ChessPiece {
         this.type = type;
     }
 
+    /*
+    public ChessPiece newPiece (ChessGame.TeamColor pieceColor; ChessPiece.PieceType type) {
+        return new ChessPiece(pieceColor, type);
+    }
+    */
+
     /**
      * The various different chess piece options
      */
@@ -54,4 +60,16 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         throw new RuntimeException("Not implemented");
     }
+
+    // for all these, must verify that we aren't passing through pieces or capturing own pieces
+
+    // method that gives all moves of a given distance that are diagonal
+
+    // method that gives all moves of a given distance that are straight
+
+    // method for pawn advancement, take color into account for direction
+
+    // method for pawn capture, take color into account for direction
+
+    // method that gives knight movements
 }

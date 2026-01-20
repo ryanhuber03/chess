@@ -14,7 +14,7 @@ public class ChessGame {
     private ChessBoard board;
 
     public ChessGame() {
-        board = new ChessBoard;
+        board = new ChessBoard();
         setTeamTurn(TeamColor.WHITE);
     }
 
@@ -66,12 +66,31 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         // verify it is your turn
+        if (board.getTeamOfSquare(move.getStartPosition()) != getTeamTurn()) {
+            throw new InvalidMoveException("Not your turn");
+        }
         // run validMoves function
+        Collection<ChessMove> availableMoves = validMoves(move.getStartPosition());
         // if valid moves is empty, throw error
+        if (availableMoves == null) {
+            throw new InvalidMoveException("Not a legal move");
+        }
         // move piece
+        board.addPiece(move.getEndPosition(), board.getPiece(move.getStartPosition()));
+        board.addPiece(move.getEndPosition(), null);
         // if pawn, check for promotion
+        if (move.getPromotionPiece() != null) {
+            // is pawn, set promotion
+            ChessPiece promPiece = new ChessPiece(getTeamTurn(), move.getPromotionPiece());
+            board.addPiece(move.getEndPosition(), promPiece);
+        }
         // switch team turn
-        throw new RuntimeException("Not implemented");
+        if (getTeamTurn() == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        }
+        else {
+            setTeamTurn(TeamColor.WHITE);
+        }
     }
 
     /**
@@ -81,20 +100,15 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        // find king, then look through all enemy pieces
+        // find king
+        for (int x = 1; x < 9; x++) {
+            for (int y = 1; y < 9; y++) {
+                ChessPosition temp = new ChessPosition(x, y);
+
+        // look through all enemy pieces
         // if any can move to the king, return true
         // return false
         throw new RuntimeException("Not implemented");
-    }
-
-    /**
-     * Determines if the given team is in checkmate
-     *
-     * @param teamColor which team to check for checkmate
-     * @return True if the specified team is in checkmate
-     */
-    public boolean isInCheckmate(TeamColor teamColor) {
-        return isInCheck(teamColor) && isInStalemate(teamColor);
     }
 
     /**
@@ -105,11 +119,36 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        // cycle through all pieces
-        // if piece can move, return false
+        // cycle through all squares
+        for (int x = 1; x < 9; x++) {
+            for (int y = 1; y < 9; y++) {
+                // if piece has valid move and is correct color, return false
+                ChessPosition temp = new ChessPosition(x, y);
+                if (temp != null) {
+                    // this isn't an empty square
+                    if (board.getPiece(temp).getTeamColor() == teamColor) {
+                        if (validMoves(temp) != null) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
         // return true
-        throw new RuntimeException("Not implemented");
+        return true;
     }
+
+
+    /**
+     * Determines if the given team is in checkmate
+     *
+     * @param teamColor which team to check for checkmate
+     * @return True if the specified team is in checkmate
+     */
+    public boolean isInCheckmate(TeamColor teamColor){
+        return isInCheck(teamColor) && isInStalemate(teamColor);
+    }
+
 
     /**
      * Sets this game's chessboard with a given board
@@ -128,4 +167,5 @@ public class ChessGame {
     public ChessBoard getBoard() {
         return board;
     }
+
 }
