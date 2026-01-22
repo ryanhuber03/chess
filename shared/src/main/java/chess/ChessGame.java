@@ -1,6 +1,8 @@
 package chess;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -52,11 +54,13 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         // find what piece is at startPosition
+        ChessPiece piece = board.getPiece(startPosition);
         // throw an error if there isn't a piece there
-        // get team, if in check throw error
-        // start cycling through moves, if it doesn't capture it's own piece, ends on the board, and doesn't end up in check, add it to validMoves
-        // return validMoves
-        throw new RuntimeException("Not implemented");
+        if (piece == null) {
+            return null;
+        }
+        return piece.pieceMoves(board, startPosition);
+        // throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -102,16 +106,40 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         // find king
+        ChessPosition king = null;
         for (int x = 1; x < 9; x++) {
             for (int y = 1; y < 9; y++) {
                 ChessPosition temp = new ChessPosition(x, y);
+                if ((board.getPiece(temp) != null) && (board.getPiece(temp).getTeamColor() == teamColor) && (board.getPiece(temp).getPieceType() == ChessPiece.PieceType.KING)) {
+                    king = temp;
+                    break;
+                }
             }
         }
+        // ChessPosition king = new ChessPosition(x, y);
 
         // look through all enemy pieces
-        // if any can move to the king, return true
-        // return false
-        throw new RuntimeException("Not implemented");
+        for (int x = 1; x < 9; x++) {
+            for (int y = 1; y < 9; y++) {
+                // check for piece at position and verify it isn't same color
+                ChessPosition temp = new ChessPosition(x, y);
+                if ((board.getPiece(temp) != null) && (board.getPiece(temp).getTeamColor() != teamColor)) {
+                    // get all moves
+                    ChessPiece enemy = board.getPiece(temp);
+                    Collection<ChessMove> moves = enemy.pieceMoves(board, temp);
+                    // iterate through moves, if any ends on position "king" return true
+                    Iterator<ChessMove> iter = moves.iterator();
+                    while (iter.hasNext()) {
+                        ChessMove curr = iter.next();
+                        if (curr.getEndPosition() == king) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+        // throw new RuntimeException("Not implemented");
     }
 
     /**
