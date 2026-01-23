@@ -167,58 +167,73 @@ public class ChessPiece {
         if (row < 1 || row > 8 || col < 1 || col > 8) {
             return moves;
         }
-        int x = 1;
 
         // look at increasing rows and columns until one is occupied, add that one too if the piece is the opposite color
-        while (board.getPiece(new ChessPosition(row + x, col + x)) != null) {
-            if (row + x > 8 || col + x > 8) {
+        int x = 1;
+        while (row + x < 9 && col + x < 9) {
+            ChessPosition temp = new ChessPosition(row + x, col + x);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add (new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add (new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row + x, col + x), null));
-            x++;
-        }
-        if (row + x < 9 && (board.getPiece(new ChessPosition(row + x, col + x)) == null || board.getPiece(new ChessPosition(row + x, col + x)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row + x, col + x), null));
         }
 
         // look at increasing rows and decreasing cols until one is occupied, add that one too if the piece is the opposite color
-        while (board.getPiece(new ChessPosition(row + x, col - x)) != null) {
-            if (row + x > 8 || col - x < 1) {
+        x = 1;
+        while (row + x < 9 && col - x > 0) {
+            ChessPosition temp = new ChessPosition(row + x, col - x);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add (new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add (new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row + x, col - x), null));
-            x++;
-        }
-        if (row + x < 9 && (board.getPiece(new ChessPosition(row + x, col - x)) == null || board.getPiece(new ChessPosition(row + x, col - x)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row + x, col - x), null));
         }
 
         // look at decreasing rows and increasing cols until one is occupied, add that one too if the piece is the opposite color
-        while (board.getPiece(new ChessPosition(row + x, col)) != null) {
-            if (row - x < 1 || col + x > 8) {
+        x = 1;
+        while (row - x > 0 && col + x < 9) {
+            ChessPosition temp = new ChessPosition(row - x, col + x);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add (new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add (new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row - x, col + x), null));
-            x++;
-        }
-        if (row + x < 9 && (board.getPiece(new ChessPosition(row - x, col + x)) == null || board.getPiece(new ChessPosition(row - x, col + x)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row - x, col + x), null));
         }
 
         // look at decreasing rows and cols until one is occupied, add that one too if the piece is the opposite color
-        while (board.getPiece(new ChessPosition(row + x, col)) != null) {
-            if (row + x < 1 || col + x < 1) {
+        x = 1;
+        while (row - x > 0 && col - x > 0) {
+            ChessPosition temp = new ChessPosition(row - x, col - x);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add (new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add (new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row - x, col - x), null));
-            x++;
-        }
-        if (row + x < 9 && (board.getPiece(new ChessPosition(row - x, col - x)) == null || board.getPiece(new ChessPosition(row - x, col - x)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row - x, col - x), null));
         }
 
         return moves;
@@ -230,68 +245,80 @@ public class ChessPiece {
         int row = position.getRow();
         int col = position.getColumn();
         if (row < 1 || row > 8 || col < 1 || col > 8) {
-            return moves;
+            return null;
         }
-        int x = 1;
         // look at increasing rows until one is occupied, add that one too if the piece is the opposite color
-        while (board.getPiece(new ChessPosition(row + x, col)) != null) {
-            if (row + x > 8) {
+        int x = 1;
+        while (row + x < 9) {
+            ChessPosition temp = new ChessPosition(row + x, col);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add (new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add (new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row + x, col), null));
-            x++;
-        }
-        if (row + x < 9 && (board.getPiece(new ChessPosition(row + x, col)) == null || board.getPiece(new ChessPosition(row + x, col)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row + x, col), null));
         }
 
         // look at decreasing rows until one is occupied, add that one too if the piece is the opposite color
-        x = 0;
-        while (board.getPiece(new ChessPosition(row - x, col)) != null) {
-            if (row - x < 1) {
+        x = 1;
+        while (row - x > 0) {
+            ChessPosition temp = new ChessPosition(row - x, col);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add(new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add(new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row - x, col), null));
-            x++;
-        }
-        if (row - x > 0 && (board.getPiece(new ChessPosition(row - x, col)) == null || board.getPiece(new ChessPosition(row - x, col)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row - x, col), null));
         }
 
         // look at increasing cols until one is occupied, add that one too if the piece is the opposite color
-        x = 0;
-        while (board.getPiece(new ChessPosition(row, col + x)) != null) {
-            if (col + x > 8) {
+        x = 1;
+        while (col + x < 9) {
+            ChessPosition temp = new ChessPosition(row, col + x);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add (new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add (new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row, col + x), null));
-            x++;
-        }
-        if (col + x < 9 && (board.getPiece(new ChessPosition(row, col + x)) == null || board.getPiece(new ChessPosition(row, col + x)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row, col + x), null));
         }
 
         // look at decreasing cols until one is occupied, add that one too if the piece is the opposite color
-        x = 0;
-        while (board.getPiece(new ChessPosition(row, col - x)) != null) {
-            if (col - x < 1) {
+        x = 1;
+        while (col - x > 0) {
+            ChessPosition temp = new ChessPosition(row, col - x);
+            ChessPiece piece = board.getPiece(temp);
+
+            if (piece == null) {
+                moves.add(new ChessMove(position, temp, null));
+                x++;
+            } else if (piece.getTeamColor() != pieceColor) {
+                moves.add(new ChessMove(position, temp, null));
+                break;
+            } else {
                 break;
             }
-            moves.add (new ChessMove(position, new ChessPosition(row, col - x), null));
-            x++;
-        }
-        if (col - x > 0 && (board.getPiece(new ChessPosition(row, col - x)) == null || board.getPiece(new ChessPosition(row, col - x)).getTeamColor() != pieceColor)) {
-            // capture piece
-            moves.add (new ChessMove(position, new ChessPosition(row, col - x), null));
         }
 
         return moves;
     }
 
-    // method for pawn advancement, take color into account for direction
+    // method for pawn movement, take color into account for direction
     private Collection<ChessMove> Pawn (ChessBoard board, ChessPosition position) {
         Collection<ChessMove> moves = new HashSet<>();
         int row = position.getRow();
@@ -363,7 +390,7 @@ public class ChessPiece {
         else if (pieceColor == ChessGame.TeamColor.BLACK){
             // move to decreasing rows
             // move by 1, no promotion, black
-            if (row < 7 && row > 2) {
+            if (row < 8 && row > 2) {
                 if (board.getPiece(new ChessPosition(row - 1, col)) == null) {
                     moves.add (new ChessMove(position, new ChessPosition(row - 1, col), null));
                 }
@@ -422,9 +449,6 @@ public class ChessPiece {
         }
         return moves;
     }
-    // method for pawn capture, take color into account for direction
-
-    // method for pawn promotion
 
     // method that gives knight movements
     private Collection<ChessMove> Knight (ChessBoard board, ChessPosition position) {
@@ -446,7 +470,7 @@ public class ChessPiece {
             if (col > 2) {
                 // add move, row + 1, col - 2
                 ChessPosition temp = new ChessPosition(row + 1, col - 2);
-                if (board.getPiece(temp) == null || pieceColor != board.getTeamOfSquare(temp))) {
+                if (board.getPiece(temp) == null || pieceColor != board.getTeamOfSquare(temp)) {
                     moves.add(new ChessMove(position, temp, null));
                 }
             }
@@ -501,6 +525,14 @@ public class ChessPiece {
         }
 
         return moves;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "pieceColor=" + pieceColor +
+                ", type=" + type +
+                '}';
     }
 
     @Override

@@ -42,7 +42,14 @@ public class ChessGame {
      */
     public enum TeamColor {
         WHITE,
-        BLACK
+        BLACK;
+
+        public String toString() {
+            if (this == WHITE) {
+                return "white";
+            }
+            return "black";
+        }
     }
 
     /**
@@ -59,7 +66,20 @@ public class ChessGame {
         if (piece == null) {
             return null;
         }
-        return piece.pieceMoves(board, startPosition);
+        HashSet<ChessMove> possible = (HashSet<ChessMove>) piece.pieceMoves(board, startPosition);
+        Collection<ChessMove> moves = new HashSet<>();
+        // iterate through possible, for all that are valid and don't leave you in check, add them to moves
+        for (ChessMove move : possible) { // somehow this works as a for loop
+            ChessPiece temp = board.getPiece(move.getEndPosition());
+            board.addPiece(startPosition, null);
+            board.addPiece(move.getEndPosition(), piece);
+            if (!isInCheck(piece.getTeamColor())) {
+                moves.add(move);
+            }
+            board.addPiece(move.getEndPosition(), temp);
+            board.addPiece(startPosition, piece);
+        }
+        return moves;
         // throw new RuntimeException("Not implemented");
     }
 
@@ -78,6 +98,9 @@ public class ChessGame {
         Collection<ChessMove> availableMoves = validMoves(move.getStartPosition());
         // if valid moves is empty, throw error
         if (availableMoves == null) {
+            throw new InvalidMoveException("No legal moves available");
+        }
+        if (!availableMoves.contains(move)) {
             throw new InvalidMoveException("Not a legal move");
         }
         // move piece
@@ -197,6 +220,14 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "teamTurn=" + teamTurn +
+                ", board=" + board +
+                '}';
     }
 
     @Override
