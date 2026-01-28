@@ -20,12 +20,6 @@ public class ChessPiece {
         this.type = type;
     }
 
-    /*
-    public ChessPiece newPiece (ChessGame.TeamColor pieceColor; ChessPiece.PieceType type) {
-        return new ChessPiece(pieceColor, type);
-    }
-    */
-
     /**
      * The various different chess piece options
      */
@@ -155,6 +149,22 @@ public class ChessPiece {
             }
         }
 
+        /*
+        // castling
+
+        // white
+        if (pieceColor == ChessGame.TeamColor.WHITE) {
+            if (row == 1 && col == 5) {
+                // test left
+
+                // test right
+                if (board.getPiece(new ChessPosition(1, 8)).getPieceType() == PieceType.ROOK && board.getPiece(new ChessPosition(1, 8)).getTeamColor() == ChessGame.TeamColor.WHITE && board.getPiece(new ChessPosition(1, 7)) == null && board.getPiece(new ChessPosition(1, 6)) == null) {
+                    // rook is in place, no pieces in between
+                    moves.add(new ChessMove(position, new ChessPosition(1, 7), null));
+                }
+            }
+        }
+        */
 
         return moves;
     }
