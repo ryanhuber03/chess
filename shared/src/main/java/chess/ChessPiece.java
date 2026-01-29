@@ -56,30 +56,30 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         if (type == PieceType.KNIGHT) {
             // knight moves
-            return Knight(board, myPosition);
+            return knight(board, myPosition);
         }
         else if (type == PieceType.KING) {
             // king moves
-            return King(board, myPosition);
+            return king(board, myPosition);
         }
         else if (type == PieceType.QUEEN) {
             // queen moves
-            Collection<ChessMove> moves = Straight(board, myPosition);
-            Collection<ChessMove> temp = Diagonal(board, myPosition);
+            Collection<ChessMove> moves = straight(board, myPosition);
+            Collection<ChessMove> temp = diagonal(board, myPosition);
             moves.addAll(temp);
             return moves;
         }
         else if (type == PieceType.PAWN) {
             // pawn moves
-            return Pawn(board, myPosition);
+            return pawn(board, myPosition);
         }
         else if (type == PieceType.BISHOP) {
             // bishop moves
-            return Diagonal(board, myPosition);
+            return diagonal(board, myPosition);
         }
         else if (type == PieceType.ROOK) {
             // rook moves
-            return Straight(board, myPosition);
+            return straight(board, myPosition);
         }
         /*
         else {
@@ -92,7 +92,7 @@ public class ChessPiece {
     // for all these, must verify that we aren't passing through pieces or capturing own pieces
 
     // method that gives all moves of distance 1
-    private Collection<ChessMove> King (ChessBoard board, ChessPosition position) {
+    private Collection<ChessMove> king (ChessBoard board, ChessPosition position) {
         Collection<ChessMove> moves = new HashSet<>();
         int row = position.getRow();
         int col = position.getColumn();
@@ -170,7 +170,7 @@ public class ChessPiece {
     }
 
     // method that gives all moves that are diagonal
-    private Collection<ChessMove> Diagonal (ChessBoard board, ChessPosition position) {
+    private Collection<ChessMove> diagonal (ChessBoard board, ChessPosition position) {
         Collection<ChessMove> moves = new HashSet<>();
         int row = position.getRow();
         int col = position.getColumn();
@@ -250,7 +250,7 @@ public class ChessPiece {
     }
 
     // method that gives all moves that are straight
-    private Collection<ChessMove> Straight (ChessBoard board, ChessPosition position) {
+    private Collection<ChessMove> straight (ChessBoard board, ChessPosition position) {
         Collection<ChessMove> moves = new HashSet<>();
         int row = position.getRow();
         int col = position.getColumn();
@@ -329,7 +329,7 @@ public class ChessPiece {
     }
 
     // method for pawn movement, take color into account for direction
-    private Collection<ChessMove> Pawn (ChessBoard board, ChessPosition position) {
+    private Collection<ChessMove> pawn (ChessBoard board, ChessPosition position) {
         Collection<ChessMove> moves = new HashSet<>();
         int row = position.getRow();
         int col = position.getColumn();
@@ -461,7 +461,7 @@ public class ChessPiece {
     }
 
     // method that gives knight movements
-    private Collection<ChessMove> Knight (ChessBoard board, ChessPosition position) {
+    private Collection<ChessMove> knight (ChessBoard board, ChessPosition position) {
         Collection<ChessMove> moves = new HashSet<>();
         int row = position.getRow();
         int col = position.getColumn();

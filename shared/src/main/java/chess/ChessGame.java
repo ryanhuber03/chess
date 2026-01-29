@@ -124,6 +124,24 @@ public class ChessGame {
         }
     }
 
+    private boolean canMove(TeamColor teamColor) {
+        for (int x = 1; x < 9; x++) {
+            for (int y = 1; y < 9; y++) {
+                // if piece has valid move and is correct color, return false
+                ChessPosition temp = new ChessPosition(x, y);
+                ChessPiece piece = board.getPiece(temp);
+                if (piece != null && piece.getTeamColor() == teamColor) {
+                    Collection<ChessMove> moves = validMoves(temp);
+                    if (moves != null && !moves.isEmpty()) {
+                        // there is a move available, so can't be in stalemate
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     /**
      * Determines if the given team is in check
      *
@@ -136,8 +154,10 @@ public class ChessGame {
         for (int x = 1; x < 9 && king == null; x++) {
             for (int y = 1; y < 9 && king == null; y++) {
                 ChessPosition temp = new ChessPosition(x, y);
-                if ((board.getPiece(temp) != null) && (board.getPiece(temp).getTeamColor() == teamColor) && (board.getPiece(temp).getPieceType() == ChessPiece.PieceType.KING)) {
-                    king = temp;
+                if (board.getPiece(temp) != null) {
+                    if ((board.getPiece(temp).getTeamColor() == teamColor) && (board.getPiece(temp).getPieceType() == ChessPiece.PieceType.KING)) {
+                        king = temp;
+                    }
                 }
             }
         }
@@ -175,23 +195,7 @@ public class ChessGame {
         if (isInCheck(teamColor)) {
             return false;
         }
-        // cycle through all squares
-        for (int x = 1; x < 9; x++) {
-            for (int y = 1; y < 9; y++) {
-                // if piece has valid move and is correct color, return false
-                ChessPosition temp = new ChessPosition(x, y);
-                ChessPiece piece = board.getPiece(temp);
-                if (piece != null && piece.getTeamColor() == teamColor) {
-                    Collection<ChessMove> moves = validMoves(temp);
-                    if (moves != null && !moves.isEmpty()) {
-                        // there is a move available, so can't be in stalemate
-                        return false;
-                    }
-                }
-            }
-        }
-        // return true
-        return true;
+        return canMove(teamColor);
     }
 
     /**
@@ -207,25 +211,8 @@ public class ChessGame {
         if (!isInCheck(teamColor)) {
             return false;
         }
-        // cycle through all squares
-        for (int x = 1; x < 9; x++) {
-            for (int y = 1; y < 9; y++) {
-                // if piece has valid move and is correct color, return false
-                ChessPosition temp = new ChessPosition(x, y);
-                ChessPiece piece = board.getPiece(temp);
-                if (piece != null && piece.getTeamColor() == teamColor) {
-                    Collection<ChessMove> moves = validMoves(temp);
-                    if (moves != null && !moves.isEmpty()) {
-                        // there is a move available, so can't be in stalemate
-                        return false;
-                    }
-                }
-            }
-        }
-        // return true
-        return true;
+        return canMove(teamColor);
     }
-
 
     /**
      * Sets this game's chessboard with a given board
