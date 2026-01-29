@@ -71,6 +71,8 @@ public class ChessGame {
         Collection<ChessMove> moves = new HashSet<>();
         // iterate through possible, for all that are valid and don't leave you in check, add them to moves
         for (ChessMove move : possible) { // somehow this works as a for loop
+            // professor suggests making new board, then making move on that board. Check for check, then toss the board.
+            // ChessBoard temp = board.clone();
             ChessPiece temp = board.getPiece(move.getEndPosition());
             board.addPiece(startPosition, null);
             board.addPiece(move.getEndPosition(), piece);
