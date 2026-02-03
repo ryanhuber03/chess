@@ -1,5 +1,4 @@
 package chess;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,7 +10,6 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPiece {
-    
     private ChessGame.TeamColor pieceColor;
     private PieceType type;
 
@@ -81,15 +79,8 @@ public class ChessPiece {
             // rook moves
             return straight(board, myPosition);
         }
-        /*
-        else {
-            throw new RuntimeException("No Piece Found");
-        }
-        */
         return null;
     }
-
-    // for all these, must verify that we aren't passing through pieces or capturing own pieces
 
     // method that gives all moves of distance 1
     private Collection<ChessMove> king (ChessBoard board, ChessPosition position) {
@@ -148,24 +139,6 @@ public class ChessPiece {
                 moves.add(new ChessMove(position, new ChessPosition(row, col - 1), null));
             }
         }
-
-        /*
-        // castling
-
-        // white
-        if (pieceColor == ChessGame.TeamColor.WHITE) {
-            if (row == 1 && col == 5) {
-                // test left
-
-                // test right
-                if (board.getPiece(new ChessPosition(1, 8)).getPieceType() == PieceType.ROOK && board.getPiece(new ChessPosition(1, 8)).getTeamColor() == ChessGame.TeamColor.WHITE && board.getPiece(new ChessPosition(1, 7)) == null && board.getPiece(new ChessPosition(1, 6)) == null) {
-                    // rook is in place, no pieces in between
-                    moves.add(new ChessMove(position, new ChessPosition(1, 7), null));
-                }
-            }
-        }
-        */
-
         return moves;
     }
 
@@ -177,13 +150,11 @@ public class ChessPiece {
         if (row < 1 || row > 8 || col < 1 || col > 8) {
             return moves;
         }
-
         // look at increasing rows and columns until one is occupied, add that one too if the piece is the opposite color
         int x = 1;
         while (row + x < 9 && col + x < 9) {
             ChessPosition temp = new ChessPosition(row + x, col + x);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add (new ChessMove(position, temp, null));
                 x++;
@@ -194,13 +165,11 @@ public class ChessPiece {
                 break;
             }
         }
-
         // look at increasing rows and decreasing cols until one is occupied, add that one too if the piece is the opposite color
         x = 1;
         while (row + x < 9 && col - x > 0) {
             ChessPosition temp = new ChessPosition(row + x, col - x);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add (new ChessMove(position, temp, null));
                 x++;
@@ -211,13 +180,11 @@ public class ChessPiece {
                 break;
             }
         }
-
         // look at decreasing rows and increasing cols until one is occupied, add that one too if the piece is the opposite color
         x = 1;
         while (row - x > 0 && col + x < 9) {
             ChessPosition temp = new ChessPosition(row - x, col + x);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add (new ChessMove(position, temp, null));
                 x++;
@@ -228,13 +195,11 @@ public class ChessPiece {
                 break;
             }
         }
-
         // look at decreasing rows and cols until one is occupied, add that one too if the piece is the opposite color
         x = 1;
         while (row - x > 0 && col - x > 0) {
             ChessPosition temp = new ChessPosition(row - x, col - x);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add (new ChessMove(position, temp, null));
                 x++;
@@ -245,7 +210,6 @@ public class ChessPiece {
                 break;
             }
         }
-
         return moves;
     }
 
@@ -262,7 +226,6 @@ public class ChessPiece {
         while (row + x < 9) {
             ChessPosition temp = new ChessPosition(row + x, col);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add (new ChessMove(position, temp, null));
                 x++;
@@ -273,13 +236,11 @@ public class ChessPiece {
                 break;
             }
         }
-
         // look at decreasing rows until one is occupied, add that one too if the piece is the opposite color
         x = 1;
         while (row - x > 0) {
             ChessPosition temp = new ChessPosition(row - x, col);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add(new ChessMove(position, temp, null));
                 x++;
@@ -290,13 +251,11 @@ public class ChessPiece {
                 break;
             }
         }
-
         // look at increasing cols until one is occupied, add that one too if the piece is the opposite color
         x = 1;
         while (col + x < 9) {
             ChessPosition temp = new ChessPosition(row, col + x);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add (new ChessMove(position, temp, null));
                 x++;
@@ -307,13 +266,11 @@ public class ChessPiece {
                 break;
             }
         }
-
         // look at decreasing cols until one is occupied, add that one too if the piece is the opposite color
         x = 1;
         while (col - x > 0) {
             ChessPosition temp = new ChessPosition(row, col - x);
             ChessPiece piece = board.getPiece(temp);
-
             if (piece == null) {
                 moves.add(new ChessMove(position, temp, null));
                 x++;
@@ -324,7 +281,6 @@ public class ChessPiece {
                 break;
             }
         }
-
         return moves;
     }
 
@@ -338,33 +294,23 @@ public class ChessPiece {
         }
         // verify color
         if (pieceColor == ChessGame.TeamColor.WHITE) {
-            // move to increasing rows
-            // move by 1, no promotion, white
-            if (row > 1 && row < 7) {
+            if (row > 1 && row < 7) { // move by 1, no promotion, white
                 if (board.getPiece(new ChessPosition(row + 1, col)) == null) {
                     moves.add (new ChessMove(position, new ChessPosition(row + 1, col), null));
                 }
             }
-            // move by 2, white
-            if (row == 2) {
+            if (row == 2) { // move by 2, white
                 if (board.getPiece(new ChessPosition(row + 1, col)) == null && board.getPiece(new ChessPosition(row + 2, col)) == null) {
                     moves.add( new ChessMove(position, new ChessPosition(row + 2, col), null));
                 }
             }
-            // promotion, white
-            if (row == 7) {
+            if (row == 7) { // promotion, white
                 if (board.getPiece(new ChessPosition(row + 1, col)) == null) {
                     ChessPosition temp = new ChessPosition(row + 1, col);
-                    // Rook, Knight, Bishop, Queen
-                    moves.add (new ChessMove(position, temp, PieceType.ROOK));
-                    moves.add (new ChessMove(position, temp, PieceType.KNIGHT));
-                    moves.add (new ChessMove(position, temp, PieceType.BISHOP));
-                    moves.add (new ChessMove(position, temp, PieceType.QUEEN));
+                    moves.addAll(pawnPromotion(position, temp));
                 }
             }
-
-            // capturing, white
-            if (row > 1 && row < 7) {
+            if (row > 1 && row < 7) { // capturing, white
                 if (col < 7 && board.getTeamOfSquare(new ChessPosition(row + 1, col + 1)) == ChessGame.TeamColor.BLACK) {
                     // capture right
                     moves.add (new ChessMove(position, new ChessPosition(row + 1, col + 1), null));
@@ -374,57 +320,36 @@ public class ChessPiece {
                     moves.add (new ChessMove(position, new ChessPosition(row + 1, col - 1), null));
                 }
             }
-
-            // capturing with promotion, white
-            if (row == 7) {
+            if (row == 7) { // capturing with promotion, white
                 if (col < 7 && board.getTeamOfSquare(new ChessPosition(row + 1, col + 1)) == ChessGame.TeamColor.BLACK) {
-                    // capture right
-                    ChessPosition temp = new ChessPosition(row + 1, col + 1);
-                    // Rook, Knight, Bishop, Queen
-                    moves.add (new ChessMove(position, temp, PieceType.ROOK));
-                    moves.add (new ChessMove(position, temp, PieceType.KNIGHT));
-                    moves.add (new ChessMove(position, temp, PieceType.BISHOP));
-                    moves.add (new ChessMove(position, temp, PieceType.QUEEN));
+                    ChessPosition temp = new ChessPosition(row + 1, col + 1); // capturing right
+                    moves.addAll(pawnPromotion(position, temp));
                 }
                 if (col > 1 && board.getTeamOfSquare(new ChessPosition(row + 1, col - 1)) == ChessGame.TeamColor.BLACK) {
-                    // capture left
-                    ChessPosition temp = new ChessPosition(row + 1, col - 1);
-                    // Rook, Knight, Bishop, Queen
-                    moves.add (new ChessMove(position, temp, PieceType.ROOK));
-                    moves.add (new ChessMove(position, temp, PieceType.KNIGHT));
-                    moves.add (new ChessMove(position, temp, PieceType.BISHOP));
-                    moves.add (new ChessMove(position, temp, PieceType.QUEEN));
+                    ChessPosition temp = new ChessPosition(row + 1, col - 1); // capturing left
+                    moves.addAll(pawnPromotion(position, temp));
                 }
             }
         }
         else if (pieceColor == ChessGame.TeamColor.BLACK){
-            // move to decreasing rows
-            // move by 1, no promotion, black
-            if (row < 8 && row > 2) {
+            if (row < 8 && row > 2) { // move by 1, no promotion, black
                 if (board.getPiece(new ChessPosition(row - 1, col)) == null) {
                     moves.add (new ChessMove(position, new ChessPosition(row - 1, col), null));
                 }
             }
-            // move by 2, black
-            if (row == 7) {
+            if (row == 7) { // move by 2, black
                 if (board.getPiece(new ChessPosition(row - 1, col)) == null && board.getPiece(new ChessPosition(row - 2, col)) == null) {
                     moves.add(new ChessMove(position, new ChessPosition(row - 2, col), null));
                 }
             }
             // promotion, black
-            if (row == 2) {
+            if (row == 2) { // promotion, black
                 if (board.getPiece(new ChessPosition(row - 1, col)) == null) {
                     ChessPosition temp = new ChessPosition(row - 1, col);
-                    // Rook, Knight, Bishop, Queen
-                    moves.add (new ChessMove(position, temp, PieceType.ROOK));
-                    moves.add (new ChessMove(position, temp, PieceType.KNIGHT));
-                    moves.add (new ChessMove(position, temp, PieceType.BISHOP));
-                    moves.add (new ChessMove(position, temp, PieceType.QUEEN));
+                    moves.addAll(pawnPromotion(position, temp));
                 }
             }
-
-            // capturing, black
-            if (row < 8 && row > 2) {
+            if (row < 8 && row > 2) { // capturing, black
                 if (col < 7 && board.getTeamOfSquare(new ChessPosition(row - 1, col + 1)) == ChessGame.TeamColor.WHITE) {
                     // capture right
                     moves.add (new ChessMove(position, new ChessPosition(row - 1, col + 1), null));
@@ -434,29 +359,26 @@ public class ChessPiece {
                     moves.add (new ChessMove(position, new ChessPosition(row - 1, col - 1), null));
                 }
             }
-
-            // capturing with promotion, black
-            if (row == 2) {
+            if (row == 2) { // capturing with promotion, black
                 if (col < 7 && board.getTeamOfSquare(new ChessPosition(row - 1, col + 1)) == ChessGame.TeamColor.WHITE) {
-                    // capture right
-                    ChessPosition temp = new ChessPosition(row - 1, col + 1);
-                    // Rook, Knight, Bishop, Queen
-                    moves.add (new ChessMove(position, temp, PieceType.ROOK));
-                    moves.add (new ChessMove(position, temp, PieceType.KNIGHT));
-                    moves.add (new ChessMove(position, temp, PieceType.BISHOP));
-                    moves.add (new ChessMove(position, temp, PieceType.QUEEN));
+                    ChessPosition temp = new ChessPosition(row - 1, col + 1); // capture right
+                    moves.addAll (pawnPromotion(position, temp));
                 }
                 if (col > 1 && board.getTeamOfSquare(new ChessPosition(row - 1, col - 1)) == ChessGame.TeamColor.WHITE) {
-                    // capture left
-                    ChessPosition temp = new ChessPosition(row - 1, col - 1);
-                    // Rook, Knight, Bishop, Queen
-                    moves.add (new ChessMove(position, temp, PieceType.ROOK));
-                    moves.add (new ChessMove(position, temp, PieceType.KNIGHT));
-                    moves.add (new ChessMove(position, temp, PieceType.BISHOP));
-                    moves.add (new ChessMove(position, temp, PieceType.QUEEN));
+                    ChessPosition temp = new ChessPosition(row - 1, col - 1); // capture left
+                    moves.addAll (pawnPromotion(position, temp));
                 }
             }
         }
+        return moves;
+    }
+
+    private Collection<ChessMove> pawnPromotion (ChessPosition start, ChessPosition end) {
+        Collection<ChessMove> moves = new HashSet<ChessMove>();
+        moves.add (new ChessMove(start, end, PieceType.ROOK));
+        moves.add (new ChessMove(start, end, PieceType.KNIGHT));
+        moves.add (new ChessMove(start, end, PieceType.BISHOP));
+        moves.add (new ChessMove(start, end, PieceType.QUEEN));
         return moves;
     }
 
@@ -468,7 +390,6 @@ public class ChessPiece {
         if (row < 1 || row > 8 || col < 1 || col > 8) {
             return moves;
         }
-        // {1,2}, {2,1}, {-1,-2}, {-2,-1}, {1,-2}, {-2,1}, {-1,2}, {2,-1}
         if (row < 8) {
             if (col < 7) {
                 // add move, row + 1, col + 2
@@ -533,7 +454,6 @@ public class ChessPiece {
                 }
             }
         }
-
         return moves;
     }
 
@@ -553,7 +473,7 @@ public class ChessPiece {
         ChessPiece that = (ChessPiece) o;
         return pieceColor == that.pieceColor && type == that.type;
     }
-
+    
     @Override
     public int hashCode() {
         return Objects.hash(pieceColor, type);

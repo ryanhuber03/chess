@@ -172,16 +172,23 @@ public class ChessGame {
                     // get all moves
                     Collection<ChessMove> moves = temp.pieceMoves(board, new ChessPosition(x, y));
                     // iterate through moves, if any ends on position "king" return true
-                    for (ChessMove move : moves) {
-                        if (move.getEndPosition().equals(king)) {
-                            return true;
-                        }
+                    if (endsOnKing(moves, king)) {
+                        return true;
                     }
                 }
             }
         }
         return false;
         // throw new RuntimeException("Not implemented");
+    }
+
+    private boolean endsOnKing (Collection<ChessMove> moves, ChessPosition king) {
+        for (ChessMove move : moves) {
+            if (move.getEndPosition().equals(king)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
