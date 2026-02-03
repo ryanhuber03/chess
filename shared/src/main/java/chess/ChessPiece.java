@@ -93,53 +93,63 @@ public class ChessPiece {
         // check all 8 moves of 1 space
         if (row < 8) {
             // all 3 moves where row is increased can be considered
-            if (board.getPiece(new ChessPosition(row + 1, col)) == null || board.getPiece(new ChessPosition(row + 1, col)).getTeamColor() != pieceColor) {
+            if (isAvaliableMove(row + 1, col, board)) {
                 moves.add(new ChessMove(position, new ChessPosition(row + 1, col), null));
             }
             if (col < 8) {
                 // increasing both is legal
-                if (board.getPiece(new ChessPosition(row + 1, col + 1)) == null || board.getPiece(new ChessPosition(row + 1, col + 1)).getTeamColor() != pieceColor) {
+                if (isAvaliableMove(row + 1, col + 1, board)) {
                     moves.add(new ChessMove(position, new ChessPosition(row + 1, col + 1), null));
                 }
             }
             if (col > 1) {
                 // decreasing col is legal
-                if (board.getPiece(new ChessPosition(row + 1, col - 1)) == null || board.getPiece(new ChessPosition(row + 1, col - 1)).getTeamColor() != pieceColor) {
+                if (isAvaliableMove(row + 1, col - 1, board)) {
                     moves.add(new ChessMove(position, new ChessPosition(row + 1, col - 1), null));
                 }
             }
         }
         if (row > 1) {
             // all 3 moves where row is decreased can be considered
-            if (board.getPiece(new ChessPosition(row - 1, col)) == null || board.getPiece(new ChessPosition(row - 1, col)).getTeamColor() != pieceColor) {
-            moves.add (new ChessMove(position, new ChessPosition(row - 1, col), null));
+            if (isAvaliableMove(row - 1, col, board)) {
+                moves.add (new ChessMove(position, new ChessPosition(row - 1, col), null));
             }
             if (col < 8) {
                 // col can be increased
-                if (board.getPiece(new ChessPosition(row - 1, col + 1)) == null || board.getPiece(new ChessPosition(row - 1, col + 1)).getTeamColor() != pieceColor) {
+                if (isAvaliableMove(row - 1, col + 1, board)) {
                     moves.add(new ChessMove(position, new ChessPosition(row - 1, col + 1), null));
                 }
             }
             if (col > 1) {
                 // col can be decreased
-                if (board.getPiece(new ChessPosition(row - 1, col - 1)) == null || board.getPiece(new ChessPosition(row - 1, col - 1)).getTeamColor() != pieceColor) {
+                if (isAvaliableMove(row - 1, col - 1, board)) {
                     moves.add(new ChessMove(position, new ChessPosition(row - 1, col - 1), null));
                 }
             }
         }
         if (col < 8) {
             // get right side
-            if (board.getPiece(new ChessPosition(row, col + 1)) == null || board.getPiece(new ChessPosition(row, col + 1)).getTeamColor() != pieceColor) {
+            if (isAvaliableMove(row, col + 1, board)) {
                 moves.add(new ChessMove(position, new ChessPosition(row, col + 1), null));
             }
         }
         if (col > 1) {
             // get left side
-            if (board.getPiece(new ChessPosition(row, col - 1)) == null || board.getPiece(new ChessPosition(row, col - 1)).getTeamColor() != pieceColor) {
+            if (isAvaliableMove(row, col - 1, board)){
                 moves.add(new ChessMove(position, new ChessPosition(row, col - 1), null));
             }
         }
         return moves;
+    }
+
+    private boolean isAvaliableMove (int row, int col, ChessBoard board) {
+        if (board.getPiece(new ChessPosition(row, col)) == null) {
+            return true;
+        }
+        if (board.getPiece(new ChessPosition(row, col)).getTeamColor() != pieceColor) {
+            return true;
+        }
+        return false;
     }
 
     // method that gives all moves that are diagonal
@@ -299,8 +309,8 @@ public class ChessPiece {
                     moves.add (new ChessMove(position, new ChessPosition(row + 1, col), null));
                 }
             }
-            if (row == 2) { // move by 2, white
-                if (board.getPiece(new ChessPosition(row + 1, col)) == null && board.getPiece(new ChessPosition(row + 2, col)) == null) {
+            if (row == 2 && board.getPiece(new ChessPosition(row + 1, col)) == null) { // move by 2, white
+                if (board.getPiece(new ChessPosition(row + 2, col)) == null) {
                     moves.add( new ChessMove(position, new ChessPosition(row + 2, col), null));
                 }
             }
@@ -311,21 +321,21 @@ public class ChessPiece {
                 }
             }
             if (row > 1 && row < 7) { // capturing, white
-                if (col < 7 && board.getTeamOfSquare(new ChessPosition(row + 1, col + 1)) == ChessGame.TeamColor.BLACK) {
+                if (col < 7 && pawnCanCapture(row + 1, col + 1, board)) {
                     // capture right
                     moves.add (new ChessMove(position, new ChessPosition(row + 1, col + 1), null));
                 }
-                if (col > 1 && board.getTeamOfSquare(new ChessPosition(row + 1, col - 1)) == ChessGame.TeamColor.BLACK) {
+                if (col > 1 && pawnCanCapture(row + 1, col - 1, board)) {
                     // capture left
                     moves.add (new ChessMove(position, new ChessPosition(row + 1, col - 1), null));
                 }
             }
             if (row == 7) { // capturing with promotion, white
-                if (col < 7 && board.getTeamOfSquare(new ChessPosition(row + 1, col + 1)) == ChessGame.TeamColor.BLACK) {
+                if (col < 7 && pawnCanCapture(row + 1, col + 1, board)) {
                     ChessPosition temp = new ChessPosition(row + 1, col + 1); // capturing right
                     moves.addAll(pawnPromotion(position, temp));
                 }
-                if (col > 1 && board.getTeamOfSquare(new ChessPosition(row + 1, col - 1)) == ChessGame.TeamColor.BLACK) {
+                if (col > 1 && pawnCanCapture(row + 1, col - 1, board)) {
                     ChessPosition temp = new ChessPosition(row + 1, col - 1); // capturing left
                     moves.addAll(pawnPromotion(position, temp));
                 }
@@ -337,8 +347,8 @@ public class ChessPiece {
                     moves.add (new ChessMove(position, new ChessPosition(row - 1, col), null));
                 }
             }
-            if (row == 7) { // move by 2, black
-                if (board.getPiece(new ChessPosition(row - 1, col)) == null && board.getPiece(new ChessPosition(row - 2, col)) == null) {
+            if (row == 7 && board.getPiece(new ChessPosition(row - 1, col)) == null) { // move by 2, black
+                if (board.getPiece(new ChessPosition(row - 2, col)) == null) {
                     moves.add(new ChessMove(position, new ChessPosition(row - 2, col), null));
                 }
             }
@@ -350,27 +360,35 @@ public class ChessPiece {
                 }
             }
             if (row < 8 && row > 2) { // capturing, black
-                if (col < 7 && board.getTeamOfSquare(new ChessPosition(row - 1, col + 1)) == ChessGame.TeamColor.WHITE) {
+                if (col < 7 && pawnCanCapture(row - 1, col + 1, board)) {
                     // capture right
                     moves.add (new ChessMove(position, new ChessPosition(row - 1, col + 1), null));
                 }
-                if (col > 1 && board.getTeamOfSquare(new ChessPosition(row - 1, col - 1)) == ChessGame.TeamColor.WHITE) {
+                if (col > 1 && pawnCanCapture(row - 1, col - 1, board)) {
                     // capture left
                     moves.add (new ChessMove(position, new ChessPosition(row - 1, col - 1), null));
                 }
             }
             if (row == 2) { // capturing with promotion, black
-                if (col < 7 && board.getTeamOfSquare(new ChessPosition(row - 1, col + 1)) == ChessGame.TeamColor.WHITE) {
+                if (col < 7 && pawnCanCapture(row - 1, col + 1, board)) {
                     ChessPosition temp = new ChessPosition(row - 1, col + 1); // capture right
                     moves.addAll (pawnPromotion(position, temp));
                 }
-                if (col > 1 && board.getTeamOfSquare(new ChessPosition(row - 1, col - 1)) == ChessGame.TeamColor.WHITE) {
+                if (col > 1 && pawnCanCapture(row - 1, col - 1, board)) {
                     ChessPosition temp = new ChessPosition(row - 1, col - 1); // capture left
                     moves.addAll (pawnPromotion(position, temp));
                 }
             }
         }
         return moves;
+    }
+
+    private boolean pawnCanCapture(int row, int col, ChessBoard board) {
+        ChessPosition temp = new ChessPosition(row, col);
+        if (board.getTeamOfSquare(temp) != pieceColor) {
+            return true;
+        }
+        return false;
     }
 
     private Collection<ChessMove> pawnPromotion (ChessPosition start, ChessPosition end) {
@@ -464,7 +482,6 @@ public class ChessPiece {
                 ", type=" + type +
                 '}';
     }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -473,7 +490,6 @@ public class ChessPiece {
         ChessPiece that = (ChessPiece) o;
         return pieceColor == that.pieceColor && type == that.type;
     }
-    
     @Override
     public int hashCode() {
         return Objects.hash(pieceColor, type);
