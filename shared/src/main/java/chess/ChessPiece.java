@@ -386,14 +386,6 @@ public class ChessPiece {
         return moves;
     }
 
-    private boolean pawnCanCapture(int row, int col, ChessBoard board) {
-        ChessPosition temp = new ChessPosition(row, col);
-        if (board.getTeamOfSquare(temp) != pieceColor) {
-            return true;
-        }
-        return false;
-    }
-
     private Collection<ChessMove> pawnPromotion (ChessPosition start, ChessPosition end) {
         Collection<ChessMove> moves = new HashSet<ChessMove>();
         moves.add (new ChessMove(start, end, PieceType.ROOK));
