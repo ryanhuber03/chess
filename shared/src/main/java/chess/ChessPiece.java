@@ -302,15 +302,16 @@ public class ChessPiece {
         if (row < 1 || row > 8 || col < 1 || col > 8) {
             return moves;
         }
-        // verify color
         if (pieceColor == ChessGame.TeamColor.WHITE) {
             if (row > 1 && row < 7) { // move by 1, no promotion, white
                 if (board.getPiece(new ChessPosition(row + 1, col)) == null) {
                     moves.add (new ChessMove(position, new ChessPosition(row + 1, col), null));
                 }
             }
-            if (row == 2 && board.getPiece(new ChessPosition(row + 1, col)) == null) { // move by 2, white
-                if (board.getPiece(new ChessPosition(row + 2, col)) == null) {
+            if (row == 2) { // move by 2, white
+                boolean x = board.getPiece(new ChessPosition(row + 1, col)) == null;
+                boolean y = board.getPiece(new ChessPosition(row + 2, col)) == null;
+                if (x && y) {
                     moves.add( new ChessMove(position, new ChessPosition(row + 2, col), null));
                 }
             }
@@ -321,38 +322,40 @@ public class ChessPiece {
                 }
             }
             if (row > 1 && row < 7) { // capturing, white
-                if (col < 7 && pawnCanCapture(row + 1, col + 1, board)) {
-                    // capture right
-                    moves.add (new ChessMove(position, new ChessPosition(row + 1, col + 1), null));
+                ChessPosition temp = new ChessPosition(row + 1, col + 1);
+                if (col < 7 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.BLACK) {
+                    moves.add (new ChessMove(position, temp, null));
                 }
-                if (col > 1 && pawnCanCapture(row + 1, col - 1, board)) {
-                    // capture left
-                    moves.add (new ChessMove(position, new ChessPosition(row + 1, col - 1), null));
+                temp = new ChessPosition(row + 1, col - 1);
+                if (col > 1 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.BLACK) {
+                    moves.add (new ChessMove(position, temp, null));
                 }
             }
             if (row == 7) { // capturing with promotion, white
-                if (col < 7 && pawnCanCapture(row + 1, col + 1, board)) {
-                    ChessPosition temp = new ChessPosition(row + 1, col + 1); // capturing right
+                ChessPosition temp = new ChessPosition(row + 1, col + 1);
+                if (col < 7 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.BLACK) {
                     moves.addAll(pawnPromotion(position, temp));
                 }
-                if (col > 1 && pawnCanCapture(row + 1, col - 1, board)) {
-                    ChessPosition temp = new ChessPosition(row + 1, col - 1); // capturing left
+                temp = new ChessPosition(row + 1, col - 1);
+                if (col > 1 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.BLACK) {
                     moves.addAll(pawnPromotion(position, temp));
                 }
             }
         }
         else if (pieceColor == ChessGame.TeamColor.BLACK){
             if (row < 8 && row > 2) { // move by 1, no promotion, black
-                if (board.getPiece(new ChessPosition(row - 1, col)) == null) {
-                    moves.add (new ChessMove(position, new ChessPosition(row - 1, col), null));
+                ChessPosition temp = new ChessPosition(row - 1, col);
+                if (board.getPiece(temp) == null) {
+                    moves.add (new ChessMove(position, temp, null));
                 }
             }
-            if (row == 7 && board.getPiece(new ChessPosition(row - 1, col)) == null) { // move by 2, black
-                if (board.getPiece(new ChessPosition(row - 2, col)) == null) {
+            if (row == 7) { // move by 2, black
+                boolean x = board.getPiece(new ChessPosition(row - 1, col)) == null;
+                boolean y = board.getPiece(new ChessPosition(row - 2, col)) == null;
+                if (x && y) {
                     moves.add(new ChessMove(position, new ChessPosition(row - 2, col), null));
                 }
             }
-            // promotion, black
             if (row == 2) { // promotion, black
                 if (board.getPiece(new ChessPosition(row - 1, col)) == null) {
                     ChessPosition temp = new ChessPosition(row - 1, col);
@@ -360,22 +363,22 @@ public class ChessPiece {
                 }
             }
             if (row < 8 && row > 2) { // capturing, black
-                if (col < 7 && pawnCanCapture(row - 1, col + 1, board)) {
-                    // capture right
-                    moves.add (new ChessMove(position, new ChessPosition(row - 1, col + 1), null));
+                ChessPosition temp = new ChessPosition(row - 1, col + 1);
+                if (col < 7 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.WHITE) {
+                    moves.add (new ChessMove(position, temp, null));
                 }
-                if (col > 1 && pawnCanCapture(row - 1, col - 1, board)) {
-                    // capture left
-                    moves.add (new ChessMove(position, new ChessPosition(row - 1, col - 1), null));
+                temp = new ChessPosition(row - 1, col - 1);
+                if (col > 1 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.WHITE) {
+                    moves.add (new ChessMove(position, temp, null));
                 }
             }
             if (row == 2) { // capturing with promotion, black
-                if (col < 7 && pawnCanCapture(row - 1, col + 1, board)) {
-                    ChessPosition temp = new ChessPosition(row - 1, col + 1); // capture right
+                ChessPosition temp = new ChessPosition(row - 1, col + 1);
+                if (col < 7 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.WHITE) {
                     moves.addAll (pawnPromotion(position, temp));
                 }
-                if (col > 1 && pawnCanCapture(row - 1, col - 1, board)) {
-                    ChessPosition temp = new ChessPosition(row - 1, col - 1); // capture left
+                temp = new ChessPosition(row - 1, col - 1);
+                if (col > 1 && board.getTeamOfSquare(temp) == ChessGame.TeamColor.WHITE) {
                     moves.addAll (pawnPromotion(position, temp));
                 }
             }
