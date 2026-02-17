@@ -1,6 +1,6 @@
 package user;
 
-// import gson
+import java.util.UUID;
 
 public class User {
     private String username;
@@ -11,8 +11,25 @@ public class User {
     private String games;
     private String gameID;
     private String playerColor;
+    private String gameName;
+    // private Game[] games;
 
-    public String getUser () {
-        return username;
+    public UserResponse getUser () {
+        return new UserResponse(this.username, this.authToken);
     }
+
+    public void makeAuth () {
+        authToken = UUID.randomUUID().toString();
+    }
+
+    public GameID makeGameID () {
+        gameID = UUID.randomUUID().toString();
+        return new GameID(gameID);
+    }
+
+    public record UserResponse (String username, String authToken) {}
+
+    public record GameID (String gameID) {}
+
+    // public record Games (Game[] games) {}
 }
