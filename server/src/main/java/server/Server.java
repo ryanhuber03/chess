@@ -5,8 +5,13 @@ import com.google.gson.Gson;
 import io.javalin.json.JavalinGson;
 
 import user.User;
+import errorException.ErrorException;
+
+import java.util.HashSet;
 
 public class Server {
+
+    private HashSet<User> users = new HashSet<User>();
 
     private final Javalin javalin;
 
@@ -26,9 +31,21 @@ public class Server {
 
             String jsonString = ctx.body();
             User test = ctx.bodyAsClass(User.class);
+
+            // verify username isn't already taken
+            String currentUser = test.getUsername();
+            for (User user : users) {
+                if (user.getUsername().equals(currentUser)) {
+                    // throw 403 error
+                    ctx.status(403);
+                    ctx.json(new ErrorException().error403());
+                    return;
+                }
+            }
             test.makeAuth();
             ctx.json(test.getUser());
             ctx.status(200);
+            users.add(test);
         });
 
         // login user
@@ -38,18 +55,46 @@ public class Server {
 
             String jsonString = ctx.body();
             User test = ctx.bodyAsClass(User.class);
-            test.makeAuth();
-            ctx.json(test.getUser());
-            ctx.status(200);
+
+            // verify username exists
+            String currentUser = test.getUsername();
+            for (User user : users) {
+                if (user.getUsername().equals(currentUser)) {
+                    // username exists, now check password.
+                    if (user.isPassword(test.getPassword())) {
+                        // correct password, return success
+                        user.makeAuth();
+                        ctx.json(user.getUser());
+                        ctx.status(200);
+                        return;
+                    }
+                }
+            }
+
+            // username or password is wrong, return unauthorized
+            ctx.status(401);
+            ctx.json(new ErrorException().error401());
         });
 
         // log user out
         javalin.delete("/session", (ctx) -> {
             // input is authToken
             // returns 200, {}
+            String authToken = ctx.header("Authorization");
 
-            ctx.result("{}");
-            ctx.status(200);
+            // check for matching auth token, if exists clear it and return 200
+            for (User user : users) {
+                if (user.isAuth(authToken)) {
+                    user.clearAuth();
+                    ctx.result("{}");
+                    ctx.status(200);
+                    return;
+                }
+            }
+
+            // auth token doesn't exist, return 401
+            ctx.json(new ErrorException().error401());
+            ctx.status(401);
         });
 
         // list games
@@ -106,9 +151,5 @@ public class Server {
 
     public void stop() {
         javalin.stop();
-    }
-
-    public String addName (String name) {
-        return name;
     }
 }
