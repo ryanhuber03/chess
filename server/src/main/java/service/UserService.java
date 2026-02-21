@@ -1,8 +1,8 @@
-package user;
+package service;
 
 import java.util.UUID;
 
-public class User {
+public class UserService {
     private String username;
     private String password;
     private String email;
@@ -32,6 +32,9 @@ public class User {
     }
 
     public boolean isPassword (String password) {
+        if (password == null) {
+            return false;
+        }
         return password.equals(this.password);
     }
 
@@ -40,6 +43,9 @@ public class User {
     }
 
     public boolean isAuth (String auth) {
+        if (authToken == null) {
+            return false;
+        }
         return auth.equals(authToken);
     }
 

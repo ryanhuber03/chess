@@ -4,14 +4,14 @@ import io.javalin.*;
 import com.google.gson.Gson;
 import io.javalin.json.JavalinGson;
 
-import user.User;
+import service.UserService;
 import errorException.ErrorException;
 
 import java.util.HashSet;
 
 public class Server {
 
-    private HashSet<User> users = new HashSet<User>();
+    private HashSet<UserService> users = new HashSet<UserService>();
 
     private final Javalin javalin;
 
@@ -30,11 +30,11 @@ public class Server {
             // returns 200, {username, authToken}
 
             String jsonString = ctx.body();
-            User test = ctx.bodyAsClass(User.class);
+            UserService test = ctx.bodyAsClass(UserService.class);
 
             // verify username isn't already taken
             String currentUser = test.getUsername();
-            for (User user : users) {
+            for (UserService user : users) {
                 if (user.getUsername().equals(currentUser)) {
                     // throw 403 error
                     ctx.status(403);
@@ -54,11 +54,11 @@ public class Server {
             // returns 200, {username, authToken}
 
             String jsonString = ctx.body();
-            User test = ctx.bodyAsClass(User.class);
+            UserService test = ctx.bodyAsClass(UserService.class);
 
             // verify username exists
             String currentUser = test.getUsername();
-            for (User user : users) {
+            for (UserService user : users) {
                 if (user.getUsername().equals(currentUser)) {
                     // username exists, now check password.
                     if (user.isPassword(test.getPassword())) {
@@ -83,7 +83,7 @@ public class Server {
             String authToken = ctx.header("Authorization");
 
             // check for matching auth token, if exists clear it and return 200
-            for (User user : users) {
+            for (UserService user : users) {
                 if (user.isAuth(authToken)) {
                     user.clearAuth();
                     ctx.result("{}");
@@ -103,7 +103,7 @@ public class Server {
             // returns 200, {"games": [ // list of games]}
 
             String jsonString = ctx.body();
-            User test = ctx.bodyAsClass(User.class);
+            UserService test = ctx.bodyAsClass(UserService.class);
             // get games somehow
             // return games
             ctx.result("{}");
@@ -116,7 +116,7 @@ public class Server {
             // returns 200, {gameID}
 
             String jsonString = ctx.body();
-            User test = ctx.bodyAsClass(User.class);
+            UserService test = ctx.bodyAsClass(UserService.class);
             ctx.json(test.makeGameID());
             ctx.status(200);
         });
@@ -127,7 +127,7 @@ public class Server {
             // returns 200, {}
 
             String jsonString = ctx.body();
-            User test = ctx.bodyAsClass(User.class);
+            UserService test = ctx.bodyAsClass(UserService.class);
             ctx.result("{}");
             ctx.status(200);
         });
